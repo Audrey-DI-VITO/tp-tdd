@@ -18,19 +18,26 @@ class DrivingLicenceFinderServiceTest {
     @InjectMocks
     private DrivingLicenceFinderService service;
 
+    @Mock
     private DrivingLicence drivingLicence;
+
+    @Mock
+    private DrivingLicenceIdGenerationService drivingLicenceIdGenerationService = new DrivingLicenceIdGenerationService();
 
     @Mock
     private InMemoryDatabase database;
 
+    @Mock
+    UUID uuid = drivingLicenceIdGenerationService.generateNewDrivingLicenceId();
+
     @Test
     void should_find() {
-        database.save(new UUID(4567, 4567), drivingLicence);
-        Assertions.assertNotNull(service.findById(new UUID(4567, 4567)));
+        database.save(uuid, drivingLicence);
+        Assertions.assertNotNull(service.findById(uuid));
     }
 
     @Test
     void should_not_find() {
-        Assertions.assertEquals(Optional.empty(), service.findById(new UUID(4567, 45677)));
+        Assertions.assertEquals(Optional.empty(), service.findById(drivingLicenceIdGenerationService.generateNewDrivingLicenceId()));
     }
 }
