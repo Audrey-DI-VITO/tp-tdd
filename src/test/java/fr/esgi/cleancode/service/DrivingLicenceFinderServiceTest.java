@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +31,6 @@ class DrivingLicenceFinderServiceTest {
 
     @Test
     void should_not_find() {
-
+        Assertions.assertEquals(Optional.empty(), service.findById(new UUID(4567, 45677)));
     }
 }
