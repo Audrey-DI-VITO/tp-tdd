@@ -3,14 +3,18 @@ package fr.esgi.cleancode.service;
 import fr.esgi.cleancode.database.InMemoryDatabase;
 import fr.esgi.cleancode.exception.ResourceNotFoundException;
 import fr.esgi.cleancode.model.DrivingLicence;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@RequiredArgsConstructor
 public class DrivingLicenceLosingPointService {
-    DrivingLicence losing_points(UUID id_licence, int points_to_lose, InMemoryDatabase database) {
+
+    InMemoryDatabase database;
+
+    public DrivingLicenceLosingPointService(InMemoryDatabase database) {
+        this.database = database;
+    }
+    DrivingLicence losing_points(UUID id_licence, int points_to_lose) {
         DrivingLicenceFinderService finderService = new DrivingLicenceFinderService(database);
         Optional<DrivingLicence> drivingLicence = finderService.findById(id_licence);
         if(drivingLicence.isEmpty()) {

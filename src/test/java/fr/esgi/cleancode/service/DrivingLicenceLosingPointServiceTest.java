@@ -18,19 +18,19 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class DrivingLicenceLosingPointServiceTest {
 
-    @InjectMocks
-    private DrivingLicenceLosingPointService serviceLosing;
-
-    final String SocialNumber="12345";
-
     @Mock
     private InMemoryDatabase database;
+
+    @InjectMocks
+    private DrivingLicenceLosingPointService serviceLosing = new DrivingLicenceLosingPointService(database);
+
+    final String SocialNumber="12345";
 
     @Test
     void should_lose_five_points(){
         DrivingLicence licence = DrivingLicence.builder().id(UUID.randomUUID()).driverSocialSecurityNumber(SocialNumber).build();
         when(database.findById(licence.getId())).thenReturn(Optional.of(licence));
-        licence = serviceLosing.losing_points(licence.getId(), 5, database);
+        licence = serviceLosing.losing_points(licence.getId(), 5);
         Assertions.assertEquals(7, licence.getAvailablePoints());
     }
 
@@ -38,7 +38,7 @@ class DrivingLicenceLosingPointServiceTest {
     void should_points_always_be_positive() {
         DrivingLicence licence = DrivingLicence.builder().id(UUID.randomUUID()).driverSocialSecurityNumber(SocialNumber).build();
         when(database.findById(licence.getId())).thenReturn(Optional.of(licence));
-        licence = serviceLosing.losing_points(licence.getId(), 15, database);
+        licence = serviceLosing.losing_points(licence.getId(), 15);
         Assertions.assertEquals(0, licence.getAvailablePoints());
     }
 
@@ -46,7 +46,7 @@ class DrivingLicenceLosingPointServiceTest {
     void should_be_updated_in_database() {
         DrivingLicence licence = DrivingLicence.builder().id(UUID.randomUUID()).driverSocialSecurityNumber(SocialNumber).build();
         when(database.findById(licence.getId())).thenReturn(Optional.of(licence));
-        licence = serviceLosing.losing_points(licence.getId(), 5, database);
+        licence = serviceLosing.losing_points(licence.getId(), 5);
         when(database.findById(licence.getId())).thenReturn(Optional.of(licence));
 
         final var actual = database.findById(licence.getId());
