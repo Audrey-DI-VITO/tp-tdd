@@ -19,9 +19,6 @@ class DrivingLicenceGenerationServiceTest {
     @InjectMocks
     private DrivingLicenceGenerationService service = new DrivingLicenceGenerationService();
 
-    private DrivingLicence serviceLicense;
-    final String SocialNumber="123456789123456";
-
     @Mock
     private InMemoryDatabase database;
 
@@ -40,23 +37,27 @@ class DrivingLicenceGenerationServiceTest {
 
     @Test
     void should_social_number_not_null(){
+        String SocialNumber="123456789123456";
         DrivingLicence License = service.CreateDrivingLicense(SocialNumber);
         Assertions.assertNotNull(License.getDriverSocialSecurityNumber());
     }
 
     @Test
     void should_have_12_point(){
+        String SocialNumber="123456789123456";
         DrivingLicence License = service.CreateDrivingLicense(SocialNumber);
         Assertions.assertEquals(12,License.getAvailablePoints());
     }
 
     @Test
     void should_social_number_is_in_parameters(){
+        String SocialNumber="123456789123456";
         DrivingLicence License = service.CreateDrivingLicense(SocialNumber);
         Assertions.assertEquals(SocialNumber, License.getDriverSocialSecurityNumber());
     }
     @Test
     void should_be_in_database(){
+        String SocialNumber="123456789123456";
         DrivingLicence License = service.CreateDrivingLicense(SocialNumber);
         when(database.findById(License.getId())).thenReturn(Optional.of(License));
         Assertions.assertNotEquals(Optional.empty(),database.findById(License.getId()));

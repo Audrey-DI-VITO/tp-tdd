@@ -24,10 +24,9 @@ class DrivingLicenceLosingPointServiceTest {
     @InjectMocks
     private DrivingLicenceLosingPointService serviceLosing = new DrivingLicenceLosingPointService(database);
 
-    final String SocialNumber="12345";
-
     @Test
     void should_lose_five_points(){
+        final String SocialNumber="12345";
         DrivingLicence licence = DrivingLicence.builder().id(UUID.randomUUID()).driverSocialSecurityNumber(SocialNumber).build();
         when(database.findById(licence.getId())).thenReturn(Optional.of(licence));
         licence = serviceLosing.losing_points(licence.getId(), 5);
@@ -36,6 +35,7 @@ class DrivingLicenceLosingPointServiceTest {
 
     @Test
     void should_points_always_be_positive() {
+        final String SocialNumber="12345";
         DrivingLicence licence = DrivingLicence.builder().id(UUID.randomUUID()).driverSocialSecurityNumber(SocialNumber).build();
         when(database.findById(licence.getId())).thenReturn(Optional.of(licence));
         licence = serviceLosing.losing_points(licence.getId(), 15);
@@ -44,6 +44,7 @@ class DrivingLicenceLosingPointServiceTest {
 
     @Test
     void should_be_updated_in_database() {
+        final String SocialNumber="12345";
         DrivingLicence licence = DrivingLicence.builder().id(UUID.randomUUID()).driverSocialSecurityNumber(SocialNumber).build();
         when(database.findById(licence.getId())).thenReturn(Optional.of(licence));
         licence = serviceLosing.losing_points(licence.getId(), 5);
