@@ -11,9 +11,6 @@ public class DrivingLicenceGenerationService {
         return DrivingLicence.builder().id(UUID.randomUUID()).driverSocialSecurityNumber(SocialNumber).build();
     }
 
-    public void generateLicense(String social_number) {
-    }
-
     public boolean check_social_number(String social_number) {
         return social_number.length() == 15 && social_number.matches("[0-9]+");
     }
