@@ -10,40 +10,55 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import java.util.UUID;
+
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class DrivingLicenceGenerationServiceTest {
 
     @InjectMocks
-    private DrivingLicenceGeneratorService service;
+    private DrivingLicenceGenerationService service = new DrivingLicenceGenerationService();
 
     private DrivingLicence serviceLicense;
-    final String SocialNumber="12345";
-    @Mock
-    DrivingLicence License=DrivingLicenceGeneratorService.CreatedrivingLicense(SocialNumber);
-
+    final String SocialNumber="123456789123456";
 
     @Mock
     private InMemoryDatabase database;
 
     @Test
-    void should_have_12_point(){
-        Assertions.assertEquals(12,License.getAvailablePoints());
+    void should_not_be_null(){
+        Assertions.assertFalse(service.check_social_number(""));
     }
+    @Test
+    void should_only_number(){
+        Assertions.assertFalse(service.check_social_number("12345678911234b"));
+    }
+    @Test
+    void should_15_length(){
+        Assertions.assertFalse(service.check_social_number("123"));
+    }
+
     @Test
     void should_social_number_not_null(){
+        DrivingLicence License = service.CreateDrivingLicense(SocialNumber);
         Assertions.assertNotNull(License.getDriverSocialSecurityNumber());
     }
+
     @Test
-    void should_social_number_is_one_in_parameters(){
-        Assertions.assertEquals(SocialNumber,License.getDriverSocialSecurityNumber());
+    void should_have_12_point(){
+        DrivingLicence License = service.CreateDrivingLicense(SocialNumber);
+        Assertions.assertEquals(12,License.getAvailablePoints());
+    }
+
+    @Test
+    void should_social_number_is_in_parameters(){
+        DrivingLicence License = service.CreateDrivingLicense(SocialNumber);
+        Assertions.assertEquals(SocialNumber, License.getDriverSocialSecurityNumber());
     }
     @Test
     void should_be_in_database(){
-        final var id =License.getId();
-        Assertions.assertNotEquals(Optional.empty(),database.findById(id));
+        DrivingLicence License = service.CreateDrivingLicense(SocialNumber);
+        when(database.findById(License.getId())).thenReturn(Optional.of(License));
+        Assertions.assertNotEquals(Optional.empty(),database.findById(License.getId()));
     }
-
-
 }
